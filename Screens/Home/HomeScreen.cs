@@ -12,6 +12,20 @@ namespace ConsoleAppSupabase.Screens.Home
         public static void View(SupabaseService supabaseService)
         {
             Console.Clear();
+            var goods = supabaseService.GetGoodsListByUser();
+            if (goods.Count == 0)
+            {
+                Console.WriteLine("No goods found.");
+                return;
+            }
+            else
+            {
+                Console.WriteLine("Goods List:");
+                foreach (var good in goods)
+                {
+                    Console.WriteLine(good.ToString());
+                }
+            }
             Console.WriteLine($"Welcome, {supabaseService.SupabaseUser?.Email ?? ""}!");
             Console.WriteLine("1. View Profile");
             Console.WriteLine("2. View Settings");

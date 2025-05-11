@@ -1,4 +1,5 @@
-﻿using Supabase.Gotrue;
+﻿using ConsoleAppSupabase.Data.Models;
+using Supabase.Gotrue;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -70,6 +71,33 @@ namespace ConsoleAppSupabase.Data.Source.Remote.SupabaseDB
             catch (Exception ex)
             {
                 throw new Exception($"Register raises exception: {ex.Message}");
+            }
+        }
+
+        public List<GoodModel> GetGoodsListByUser()
+        {
+            try
+            {
+                var goods = _client.From<GoodModel>()
+                    .Select("*").Filter("user_id", Supabase.Postgrest.Constants.Operator.Equals, SupabaseUser?.Id).Get();
+                return goods.Result.Models;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"GetGoodsList raises exception: {ex.Message}");
+            }
+        }
+
+        public async Task Logout()
+        {
+            try
+            {
+                await _client.Auth.SignOut();
+                IsLoggedIn = false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Logout raises exception: {ex.Message}");
             }
         }
 
